@@ -1,4 +1,5 @@
 #include "chessboard.hpp"
+#include <stdexcept>
 #include "basic_move_check.hpp"
 #include "bishop.hpp"
 #include "king.hpp"
@@ -10,6 +11,16 @@
 Chessboard::Chessboard()
     : white_to_play(true)
 {
+    board.resize(8);
+    for (size_t i = 0; i < 8; i++)
+    {
+        board[i].resize(8);
+    }
+    for (size_t i = 0; i < 8; i++)
+    {
+        board[i][1] = std::make_unique<Pawn>(true);
+        board[i][6] = std::make_unique<Pawn>(false);
+    }
 }
 
 std::vector<std::vector<std::unique_ptr<Piece>>>& Chessboard::get_board()

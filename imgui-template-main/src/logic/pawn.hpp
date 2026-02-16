@@ -5,11 +5,7 @@
 class Pawn : public Piece {
 public:
     Pawn(/* args */);
-    ~Pawn() override;
-    Pawn(const Pawn&)            = delete;
-    Pawn(Pawn&&)                 = delete;
-    Pawn& operator=(const Pawn&) = delete;
-    Pawn& operator=(Pawn&&)      = delete;
+    explicit Pawn(bool i_am_white);
 
     bool i_am_white;
 

@@ -4,12 +4,8 @@
 
 class Rook : public Piece {
 public:
+    explicit Rook(bool i_am_white);
     Rook(/* args */);
-    ~Rook() override;
-    Rook(const Rook&)            = delete;
-    Rook(Rook&&)                 = delete;
-    Rook& operator=(const Rook&) = delete;
-    Rook& operator=(Rook&&)      = delete;
 
     bool i_am_white;
 

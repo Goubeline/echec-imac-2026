@@ -6,6 +6,7 @@ class Chessboard;
 
 class Piece {
 public:
+    Piece()                        = default;
     virtual ~Piece()               = default;
     Piece(const Piece&)            = delete;
     Piece(Piece&&)                 = delete;

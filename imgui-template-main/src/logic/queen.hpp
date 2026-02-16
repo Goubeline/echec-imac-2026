@@ -4,12 +4,8 @@
 
 class Queen : public Piece {
 public:
+    explicit Queen(bool i_am_white);
     Queen(/* args */);
-    ~Queen() override;
-    Queen(const Queen&)            = delete;
-    Queen(Queen&&)                 = delete;
-    Queen& operator=(const Queen&) = delete;
-    Queen& operator=(Queen&&)      = delete;
 
     bool i_am_white;
 

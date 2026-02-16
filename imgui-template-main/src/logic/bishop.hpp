@@ -4,12 +4,8 @@
 
 class Bishop : public Piece {
 public:
+    explicit Bishop(bool i_am_white);
     Bishop(/* args */);
-    ~Bishop() override;
-    Bishop(const Bishop&)            = delete;
-    Bishop(Bishop&&)                 = delete;
-    Bishop& operator=(const Bishop&) = delete;
-    Bishop& operator=(Bishop&&)      = delete;
 
     bool i_am_white;
 

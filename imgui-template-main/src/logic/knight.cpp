@@ -3,6 +3,10 @@
 #include "basic_move_check.hpp"
 #include "chessboard.hpp"
 
+Knight::Knight(bool i_am_white)
+    : i_am_white(i_am_white)
+{}
+
 std::vector<std::pair<int, int>> Knight::possible_moves(Chessboard& chessboard, std::pair<int, int>& position)
 {
     int                              x     = position.first;
