@@ -1,12 +1,12 @@
-# ## -----------------------------------------------------------------------
-# ##
-# ## If you want to learn CMake:
-# ## https://julesfouchy.github.io/Learn--Clean-Code-With-Cpp/lessons/cmake/
-# ##
-# ## If you want to see how to add libraries to your project:
-# ## https://julesfouchy.github.io/Learn--Clean-Code-With-Cpp/lessons/use-libraries/#how-to
-# ##
-# ## -----------------------------------------------------------------------
+# # ## -----------------------------------------------------------------------
+# # ##
+# # ## If you want to learn CMake:
+# # ## https://julesfouchy.github.io/Learn--Clean-Code-With-Cpp/lessons/cmake/
+# # ##
+# # ## If you want to see how to add libraries to your project:
+# # ## https://julesfouchy.github.io/Learn--Clean-Code-With-Cpp/lessons/use-libraries/#how-to
+# # ##
+# # ## -----------------------------------------------------------------------
 
 cmake_minimum_required(VERSION 3.20)
 
@@ -43,3 +43,4 @@ target_include_directories(${PROJECT_NAME} PRIVATE src)
 # Add quick-imgui library
 add_subdirectory(lib/quick_imgui)
 target_link_libraries(${PROJECT_NAME} PRIVATE quick_imgui::quick_imgui)
+
