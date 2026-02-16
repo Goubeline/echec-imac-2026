@@ -9,7 +9,7 @@
 #include "rook.hpp"
 
 Chessboard::Chessboard()
-    : white_to_play(true)
+    : white_to_play(true), check(false)
 {
     board.resize(8);
     for (size_t i = 0; i < 8; i++)
