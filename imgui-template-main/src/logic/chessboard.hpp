@@ -27,3 +27,7 @@ public:
     std::vector<std::vector<std::unique_ptr<Piece>>>& get_board();
     void                                              is_check(std::pair<int, int> king);
 };
+//select piece renvoie les mouv possibles a partir de la case donnée
+// movement fait le mouvement (bool si mouv illégal le fait pas)
+//is_check pour l'échec 
+//faire rook.cpp 
