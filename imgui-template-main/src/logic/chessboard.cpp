@@ -9,7 +9,7 @@
 #include "rook.hpp"
 
 Chessboard::Chessboard()
-    : white_to_play(true), check(false)
+    : white_to_play(true), check(false), en_passant_possible(false)
 {
     board.resize(8);
     for (size_t i = 0; i < 8; i++)
@@ -21,6 +21,25 @@ Chessboard::Chessboard()
         board[i][1] = std::make_unique<Pawn>(true);
         board[i][6] = std::make_unique<Pawn>(false);
     }
+    board[0][0] = std::make_unique<Rook>(true);
+    board[0][7] = std::make_unique<Rook>(false);
+    board[1][0] = std::make_unique<Knight>(true);
+    board[1][7] = std::make_unique<Knight>(false);
+    board[2][0] = std::make_unique<Bishop>(true);
+    board[2][7] = std::make_unique<Bishop>(false);
+    board[3][0] = std::make_unique<Queen>(true);
+    board[3][7] = std::make_unique<Queen>(false);
+    board[7][0] = std::make_unique<Rook>(true);
+    board[7][7] = std::make_unique<Rook>(false);
+    board[6][0] = std::make_unique<Knight>(true);
+    board[6][7] = std::make_unique<Knight>(false);
+    board[5][0] = std::make_unique<Bishop>(true);
+    board[5][7] = std::make_unique<Bishop>(false);
+    board[4][0] = std::make_unique<King>(true);
+    board[4][7] = std::make_unique<King>(false);
+
+    white_king = std::make_pair(4, 0);
+    black_king = std::make_pair(4, 7);
 }
 
 std::vector<std::vector<std::unique_ptr<Piece>>>& Chessboard::get_board()
@@ -119,6 +138,7 @@ std::vector<std::pair<int, int>> Chessboard::piece_movement(std::pair<int, int>&
 
 std::vector<std::pair<int, int>> Chessboard::select_piece(const std::pair<int, int>& square) const
 {}
+
 bool Chessboard::movement(const std::pair<int, int>& start_position, const std::pair<int, int>& end_position)
 {
 }
