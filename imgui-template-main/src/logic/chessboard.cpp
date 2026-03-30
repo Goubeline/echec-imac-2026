@@ -171,4 +171,5 @@ bool Chessboard::movement(const std::pair<int, int>& start_position, const std::
     
     board[end_position.first][end_position.second] = std::move(board[start_position.first][start_position.second]);
     board[start_position.first][start_position.second] = nullptr;
+    return true;
 }
