@@ -101,7 +101,8 @@ void Chessboard::is_check(std::pair<int, int> king)
         piece = eat.erase(piece);
     }
 
-    pawn_moves(king, board, i_am_white, moves, eat);
+    std::pair<int, int> not_a_pawn = std::make_pair<int>(-1, -1); //en passant impossible
+    pawn_moves(king, board, i_am_white, moves, eat, not_a_pawn);
     for (auto piece = eat.begin(); piece != eat.end();)
     {
         if (dynamic_cast<Pawn*>(board[piece->first][piece->second].get()) != nullptr)
@@ -149,6 +150,25 @@ std::vector<std::pair<int, int>> Chessboard::select_piece(std::pair<int, int>& s
 
 bool Chessboard::movement(const std::pair<int, int>& start_position, const std::pair<int, int>& end_position)
 {
+    if (abs(end_position.second - start_position.second) == 2 && dynamic_cast<Pawn*>(board[start_position.first][start_position.second].get()) != nullptr)
+    {
+        en_passant_possible = true;
+        en_passant_case.first = end_position.first;
+        en_passant_case.second = end_position.second;
+        if (white_to_play)
+        {
+            en_passant_case.second--;
+        }
+        else
+        {
+            en_passant_case.second++;
+        }
+    }
+    else
+    {
+        en_passant_possible = false;
+    }
+    
     board[end_position.first][end_position.second] = std::move(board[start_position.first][start_position.second]);
     board[start_position.first][start_position.second] = nullptr;
 }

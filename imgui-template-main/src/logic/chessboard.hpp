@@ -11,9 +11,6 @@ private:
     std::vector<std::vector<std::unique_ptr<Piece>>> board; // x = A-H   y = 1-8
     bool                                             white_to_play;
     bool                                             check;
-    bool                                             en_passant_possible;
-    std::pair<int, int>                              en_passant_case;
-
     std::vector<std::pair<int, int>> piece_movement(std::pair<int, int>& piece);
 
 public:
@@ -28,6 +25,9 @@ public:
     bool                                              movement(const std::pair<int, int>& start_position, const std::pair<int, int>& end_position);
     std::vector<std::vector<std::unique_ptr<Piece>>>& get_board();
     void                                              is_check(std::pair<int, int> king);
+
+    bool                                             en_passant_possible;
+    std::pair<int, int>                              en_passant_case;
 };
 // select piece renvoie les mouv possibles a partir de la case donnée
 //  movement fait le mouvement (bool si mouv illégal le fait pas)

@@ -202,7 +202,7 @@ void knight_moves(std::pair<int, int>& position, std::vector<std::vector<std::un
     knight_move_case(x, y, board, is_piece_white, moves, eat);
 }
 
-void pawn_moves(std::pair<int, int>& position, std::vector<std::vector<std::unique_ptr<Piece>>> const& board, bool is_piece_white, std::vector<std::pair<int, int>>& moves, std::vector<std::pair<int, int>>& eat)
+void pawn_moves(std::pair<int, int>& position, std::vector<std::vector<std::unique_ptr<Piece>>> const& board, bool is_piece_white, std::vector<std::pair<int, int>>& moves, std::vector<std::pair<int, int>>& eat, std::pair<int, int>& en_passant)
 {
     if (is_piece_white)
     {
@@ -217,12 +217,12 @@ void pawn_moves(std::pair<int, int>& position, std::vector<std::vector<std::uniq
         }
 
         // eating (on the sides)
-        if (position.first + 1 < 8 && board[position.first + 1][position.second + 1] != nullptr && !board[position.first + 1][position.second + 1]->i_am_white)
+        if (position.first + 1 < 8 && (board[position.first + 1][position.second + 1] != nullptr || (en_passant.first >= 0  && position.first + 1 == en_passant.first && position.second + 1 == en_passant.second)) && !board[position.first + 1][position.second + 1]->i_am_white)
         {
             moves.emplace_back(position.first + 1, position.second + 1);
             eat.emplace_back(position.first + 1, position.second + 1);
         }
-        if (position.first - 1 >= 0 && board[position.first - 1][position.second + 1] != nullptr && !board[position.first - 1][position.second + 1]->i_am_white)
+        if (position.first - 1 >= 0 && (board[position.first - 1][position.second + 1] != nullptr  || (en_passant.first >= 0  && position.first - 1 == en_passant.first && position.second + 1 == en_passant.second)) && !board[position.first - 1][position.second + 1]->i_am_white)
         {
             moves.emplace_back(position.first - 1, position.second + 1);
             eat.emplace_back(position.first - 1, position.second + 1);
@@ -241,12 +241,12 @@ void pawn_moves(std::pair<int, int>& position, std::vector<std::vector<std::uniq
         }
 
         // eating (on the sides)
-        if (position.first + 1 < 8 && board[position.first + 1][position.second - 1] != nullptr && board[position.first + 1][position.second + 1]->i_am_white)
+        if (position.first + 1 < 8 && (board[position.first + 1][position.second - 1] != nullptr  || (en_passant.first >= 0  && position.first + 1 == en_passant.first && position.second - 1 == en_passant.second)) && board[position.first + 1][position.second + 1]->i_am_white)
         {
             moves.emplace_back(position.first + 1, position.second - 1);
             eat.emplace_back(position.first + 1, position.second - 1);
         }
-        if (position.first - 1 >= 0 && board[position.first - 1][position.second - 1] != nullptr && board[position.first - 1][position.second - 1]->i_am_white)
+        if (position.first - 1 >= 0 && (board[position.first - 1][position.second - 1] != nullptr  || (en_passant.first >= 0  && position.first - 1 == en_passant.first && position.second - 1 == en_passant.second)) && board[position.first - 1][position.second - 1]->i_am_white)
         {
             moves.emplace_back(position.first - 1, position.second - 1);
             eat.emplace_back(position.first - 1, position.second - 1);
