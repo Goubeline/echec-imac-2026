@@ -136,9 +136,19 @@ std::vector<std::pair<int, int>> Chessboard::piece_movement(std::pair<int, int>&
     return piece_move;
 }
 
-std::vector<std::pair<int, int>> Chessboard::select_piece(const std::pair<int, int>& square) const
-{}
+std::vector<std::pair<int, int>> Chessboard::select_piece(std::pair<int, int>& square)
+{
+    if (board[square.first][square.second] == nullptr)
+    {
+        std::vector<std::pair<int, int>> moves = {};
+        return moves;
+    }
+    
+    return piece_movement(square);
+}
 
 bool Chessboard::movement(const std::pair<int, int>& start_position, const std::pair<int, int>& end_position)
 {
+    board[end_position.first][end_position.second] = std::move(board[start_position.first][start_position.second]);
+    board[start_position.first][start_position.second] = nullptr;
 }

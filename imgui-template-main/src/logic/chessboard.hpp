@@ -24,7 +24,7 @@ public:
     Chessboard& operator=(const Chessboard&);
     Chessboard& operator=(Chessboard&&) = delete;
 
-    std::vector<std::pair<int, int>>                  select_piece(const std::pair<int, int>& square) const;
+    std::vector<std::pair<int, int>>                  select_piece(std::pair<int, int>& square);
     bool                                              movement(const std::pair<int, int>& start_position, const std::pair<int, int>& end_position);
     std::vector<std::vector<std::unique_ptr<Piece>>>& get_board();
     void                                              is_check(std::pair<int, int> king);
