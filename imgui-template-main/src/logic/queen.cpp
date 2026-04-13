@@ -1,10 +1,7 @@
 #include "queen.hpp"
 #include "basic_move_check.hpp"
 #include "chessboard.hpp"
-
-Queen::Queen(bool i_am_white)
-    : i_am_white(i_am_white)
-{}
+Queen::Queen(bool i_am_white) : Piece(i_am_white) {}
 
 std::vector<std::pair<int, int>> Queen::possible_moves(Chessboard& board, std::pair<int, int>& position)
 {

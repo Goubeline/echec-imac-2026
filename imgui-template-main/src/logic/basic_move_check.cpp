@@ -204,52 +204,77 @@ void knight_moves(std::pair<int, int>& position, std::vector<std::vector<std::un
 
 void pawn_moves(std::pair<int, int>& position, std::vector<std::vector<std::unique_ptr<Piece>>> const& board, bool is_piece_white, std::vector<std::pair<int, int>>& moves, std::vector<std::pair<int, int>>& eat, std::pair<int, int>& en_passant)
 {
+    int x = position.first;
+    int y = position.second;
+
     if (is_piece_white)
     {
-        if (board[position.first][position.second + 1] == nullptr)
+        // --- PIONS BLANCS (Montent : y + 1) ---
+        if (y + 1 < 8 && board[x][y + 1] == nullptr)
         {
-            moves.emplace_back(position.first, position.second + 1);
-
-            if (position.second == 1 && board[position.first][position.second + 2] == nullptr)
+            moves.emplace_back(x, y + 1);
+            if (y == 1 && board[x][y + 2] == nullptr) // Double saut
             {
-                moves.emplace_back(position.first, position.second + 2);
+                moves.emplace_back(x, y + 2);
             }
         }
 
-        // eating (on the sides)
-        if (position.first + 1 < 8 && (board[position.first + 1][position.second + 1] != nullptr || (en_passant.first >= 0  && position.first + 1 == en_passant.first && position.second + 1 == en_passant.second)) && !board[position.first + 1][position.second + 1]->i_am_white)
+        // Manger à droite (x + 1)
+        if (x + 1 < 8 && y + 1 < 8)
         {
-            moves.emplace_back(position.first + 1, position.second + 1);
-            eat.emplace_back(position.first + 1, position.second + 1);
+            if (board[x + 1][y + 1] != nullptr && !board[x + 1][y + 1]->i_am_white) {
+                moves.emplace_back(x + 1, y + 1);
+                eat.emplace_back(x + 1, y + 1);
+            } else if (en_passant.first == x + 1 && en_passant.second == y + 1) {
+                moves.emplace_back(x + 1, y + 1);
+                eat.emplace_back(x + 1, y + 1);
+            }
         }
-        if (position.first - 1 >= 0 && (board[position.first - 1][position.second + 1] != nullptr  || (en_passant.first >= 0  && position.first - 1 == en_passant.first && position.second + 1 == en_passant.second)) && !board[position.first - 1][position.second + 1]->i_am_white)
+        // Manger à gauche (x - 1)
+        if (x - 1 >= 0 && y + 1 < 8)
         {
-            moves.emplace_back(position.first - 1, position.second + 1);
-            eat.emplace_back(position.first - 1, position.second + 1);
+            if (board[x - 1][y + 1] != nullptr && !board[x - 1][y + 1]->i_am_white) {
+                moves.emplace_back(x - 1, y + 1);
+                eat.emplace_back(x - 1, y + 1);
+            } else if (en_passant.first == x - 1 && en_passant.second == y + 1) {
+                moves.emplace_back(x - 1, y + 1);
+                eat.emplace_back(x - 1, y + 1);
+            }
         }
     }
     else
     {
-        if (board[position.first][position.second - 1] == nullptr)
+        // --- PIONS NOIRS (Descendent : y - 1) ---
+        if (y - 1 >= 0 && board[x][y - 1] == nullptr)
         {
-            moves.emplace_back(position.first, position.second - 1);
-
-            if (position.second == 6 && board[position.first][position.second - 2] == nullptr)
+            moves.emplace_back(x, y - 1);
+            if (y == 6 && board[x][y - 2] == nullptr) // Double saut
             {
-                moves.emplace_back(position.first, position.second - 2);
+                moves.emplace_back(x, y - 2);
             }
         }
 
-        // eating (on the sides)
-        if (position.first + 1 < 8 && (board[position.first + 1][position.second - 1] != nullptr  || (en_passant.first >= 0  && position.first + 1 == en_passant.first && position.second - 1 == en_passant.second)) && board[position.first + 1][position.second + 1]->i_am_white)
+        // Manger à droite (x + 1)
+        if (x + 1 < 8 && y - 1 >= 0)
         {
-            moves.emplace_back(position.first + 1, position.second - 1);
-            eat.emplace_back(position.first + 1, position.second - 1);
+            if (board[x + 1][y - 1] != nullptr && board[x + 1][y - 1]->i_am_white) {
+                moves.emplace_back(x + 1, y - 1);
+                eat.emplace_back(x + 1, y - 1);
+            } else if (en_passant.first == x + 1 && en_passant.second == y - 1) {
+                moves.emplace_back(x + 1, y - 1);
+                eat.emplace_back(x + 1, y - 1);
+            }
         }
-        if (position.first - 1 >= 0 && (board[position.first - 1][position.second - 1] != nullptr  || (en_passant.first >= 0  && position.first - 1 == en_passant.first && position.second - 1 == en_passant.second)) && board[position.first - 1][position.second - 1]->i_am_white)
+        // Manger à gauche (x - 1)
+        if (x - 1 >= 0 && y - 1 >= 0)
         {
-            moves.emplace_back(position.first - 1, position.second - 1);
-            eat.emplace_back(position.first - 1, position.second - 1);
+            if (board[x - 1][y - 1] != nullptr && board[x - 1][y - 1]->i_am_white) {
+                moves.emplace_back(x - 1, y - 1);
+                eat.emplace_back(x - 1, y - 1);
+            } else if (en_passant.first == x - 1 && en_passant.second == y - 1) {
+                moves.emplace_back(x - 1, y - 1);
+                eat.emplace_back(x - 1, y - 1);
+            }
         }
     }
 }

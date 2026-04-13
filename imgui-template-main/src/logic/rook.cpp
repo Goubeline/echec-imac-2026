@@ -2,9 +2,7 @@
 #include "basic_move_check.hpp"
 #include "chessboard.hpp"
 
-Rook::Rook(bool i_am_white)
-    : i_am_white(i_am_white)
-{}
+Rook::Rook(bool i_am_white) : Piece(i_am_white) {}
 
 std::vector<std::pair<int, int>> Rook::possible_moves(Chessboard& board, std::pair<int, int>& position)
 {

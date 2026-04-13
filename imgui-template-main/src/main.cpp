@@ -1,10 +1,28 @@
 #include "quick_imgui/quick_imgui.hpp"
-#include "gameplay/board.hpp"
+#include "logic/chessboard.hpp" 
 #include "design/chessUI.hpp"
+#include <optional>
+#include <vector>
+#include <string>
+#include <memory>
+
+// AJOUT DES INCLUDES POUR CRÉER LES NOUVELLES PIÈCES
+#include "logic/queen.hpp"
+#include "logic/rook.hpp"
+#include "logic/bishop.hpp"
+#include "logic/knight.hpp"
 
 int main() {
+    Chessboard myBoard;    
 
-    Board myBoard;    
+    std::optional<std::pair<int, int>> selected_square;
+    std::vector<std::pair<int, int>> possible_moves;
+    std::optional<std::string> winner_message = std::nullopt; 
+
+    // --- VARIABLES DE PROMOTION ---
+    bool show_promotion_modal = false;
+    std::pair<int, int> promotion_square = {-1, -1};
+    // ------------------------------
 
     quick_imgui::loop(
         "Chess Game",
@@ -13,38 +31,63 @@ int main() {
             .loop = [&]() {
                 ImGui::Begin("Plateau");
                 
-                ChessUI::DrawBoard(myBoard);
+                // On ajoute nos deux nouvelles variables d'état
+                ChessUI::DrawBoard(myBoard, selected_square, possible_moves, winner_message, show_promotion_modal, promotion_square);
 
                 ImGui::End();
-            },
+
+                if (winner_message) {
+                    ImGui::Begin("FIN DE PARTIE", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
+                    ImGui::Text("%s", winner_message.value().c_str());
+                    
+                    if (ImGui::Button("Quitter le jeu")) {
+                        exit(0);
+                    }
+                    ImGui::End();
+                }
+
+                // --- AFFICHAGE DE LA FENÊTRE DE PROMO ---
+                if (show_promotion_modal) {
+                    ImGui::OpenPopup("Promotion du Pion");
+                }
+
+                // bloque interface
+                if (ImGui::BeginPopupModal("Promotion du Pion", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove)) {
+                    ImGui::Text("Bravo ! Choisissez en quoi votre pion se transforme :");
+                    ImGui::Separator();
+                    
+                    // (On a inversé le tour à la fin du mouvement, donc la pièce est de l'équipe inverse du tour actuel)
+                    bool is_white = !myBoard.white_to_play;
+
+                    if (ImGui::Button("Dame (D)", ImVec2(120, 40))) {
+                        myBoard.get_board()[promotion_square.first][promotion_square.second] = std::make_unique<Queen>(is_white);
+                        show_promotion_modal = false;
+                    }
+                    ImGui::SameLine();
+                    if (ImGui::Button("Tour (T)", ImVec2(120, 40))) {
+                        myBoard.get_board()[promotion_square.first][promotion_square.second] = std::make_unique<Rook>(is_white);
+                        show_promotion_modal = false;
+                    }
+                    
+                    if (ImGui::Button("Cavalier (C)", ImVec2(120, 40))) {
+                        myBoard.get_board()[promotion_square.first][promotion_square.second] = std::make_unique<Knight>(is_white);
+                        show_promotion_modal = false;
+                    }
+                    ImGui::SameLine();
+                    if (ImGui::Button("Fou (F)", ImVec2(120, 40))) {
+                        myBoard.get_board()[promotion_square.first][promotion_square.second] = std::make_unique<Bishop>(is_white);
+                        show_promotion_modal = false;
+                    }
+
+                    // Si on a cliqué sur un bouton, show_promotion_modal est passé à false, on ferme la popup
+                    if (!show_promotion_modal) {
+                        ImGui::CloseCurrentPopup();
+                    }
+                    ImGui::EndPopup();
+                }
+                // ---------------------------------------------------
+            } 
         }
     );
     return 0;
 }
-
-
-//  ImGui::ShowDemoWindow(); // This opens a window which shows tons of examples of what you can do with ImGui. You should check it out! Also, you can use the "Item Picker" in the top menu of that demo window: then click on any widget and it will show you the corresponding code directly in your IDE!
-
-//                     ImGui::Begin("Example");
-
-//                     ImGui::SliderFloat("My Value", &value, 0.f, 3.f);
-
-//                     if (ImGui::Button("1", ImVec2{50.f, 50.f}))
-//                         std::cout << "Clicked button 1\n";
-//                     ImGui::SameLine(); // Draw the next ImGui widget on the same line as the previous one. Otherwise it would be below it
-
-//                     ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{1.f, 0.f, 0.f, 1.f}); // Changes the color of all buttons until we call ImGui::PopStyleColor(). There is also ImGuiCol_ButtonActive and ImGuiCol_ButtonHovered
-
-//                     ImGui::PushID(2); // When some ImGui items have the same label (for exemple the next two buttons are labeled "Yo") ImGui needs you to specify an ID so that it can distinguish them. It can be an int, a pointer, a string, etc.
-//                                       // You will definitely run into this when you create a button for each of your chess pieces, so remember to give them an ID!
-//                     if (ImGui::Button("Yo", ImVec2{50.f, 50.f}))
-//                         std::cout << "Clicked button 2\n";
-//                     ImGui::PopID(); // Then pop the id you pushed after you created the widget
-
-//                     ImGui::SameLine();
-//                     ImGui::PushID(3);
-//                     if (ImGui::Button("Yo", ImVec2{50.f, 50.f}))
-//                         std::cout << "Clicked button 3\n";
-//                     ImGui::PopID();
-
-//                     ImGui::PopStyleColor();
