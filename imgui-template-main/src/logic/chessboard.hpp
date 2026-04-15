@@ -13,11 +13,11 @@ private:
     std::vector<std::pair<int, int>> piece_movement(std::pair<int, int>& piece);
 
 public:
-    // ---> MODIFICATION ICI : white_to_play est maintenant public
+   
     bool                                             white_to_play = true; 
 
     Chessboard();
-    // ---> MODIFICATION ICI : on demande au compilateur de générer le destructeur par défaut
+   
     ~Chessboard() = default; 
     Chessboard(const Chessboard&);
     Chessboard(Chessboard&&) = delete;
