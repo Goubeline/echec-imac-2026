@@ -5,7 +5,7 @@
 #include <sstream>
 #include <iostream>
 
-// !! RETROUVER loadProgramm() pour corriger, pour l'instant LoadShader
+
 inline GLuint LoadShader(const char* vertexPath, const char* fragmentPath) {
     std::string vertexCode, fragmentCode;
     std::ifstream vShaderFile(vertexPath), fShaderFile(fragmentPath);
@@ -36,7 +36,7 @@ struct BoardProgram {
     GLint uColor; 
 
     BoardProgram() {
-     // Le "../../" permet de remonter depuis bin/Debug/ vers la racine du projet sinon plante 
+     // Le "../../" permet de remonter depuis bin/Debug/ vers la racine du projet sinon plante (A CHANGER !!!)
 m_Program = LoadShader("../../shaders/3D.vs.glsl", "../../shaders/3D.fs.glsl");
         
         // On récupère les adresses (comme constructeur)

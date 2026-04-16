@@ -2,22 +2,18 @@
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <vector>
+#include "Shape.hpp"
 
-
-struct ShapeVertex {
-    glm::vec3 position;
-    glm::vec3 normal;
-    glm::vec2 texCoords;
-};
-
-class Cube {
-public:
-    Cube();
-    ~Cube();
-    void draw();
-    int getVertexCount() const { return 36; } // (td)
+class Cube : public Shape {
 
 private:
     GLuint m_vao;
     GLuint m_vbo;
+    
+public:
+    Cube();
+    ~Cube();
+    void draw() const override;
+    int getVertexCount() const { return 36; }
+
 };
