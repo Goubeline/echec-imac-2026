@@ -54,6 +54,7 @@ int main() {
     std::vector<std::pair<int, int>> possible_moves;
     std::optional<std::string> winner_message;
     
+    bool is_check = false;
     bool show_promotion_modal = false;
     std::pair<int, int> promotion_square = {-1, -1};
 
@@ -149,7 +150,13 @@ int main() {
                             anim->start(glm::vec3(selected_square->first, 0.0f, selected_square->second), 
                                         glm::vec3(c, 0.0f, r), c, r, std::move(capturedPiece));
                             
-                            myBoard->movement(*selected_square, {c, r});
+                            if(!myBoard->movement(*selected_square, {c, r}))
+                            {
+                                is_check = true;
+                            }
+                            else{
+                                is_check = false;
+                            }
                             
                             if (dynamic_cast<Pawn*>(grid[c][r].get()) && (r == 0 || r == 7)) {
                                 promotion_square = {c, r};
@@ -168,6 +175,10 @@ int main() {
             // --- INTERFACE IMGUI ("Infos") ---
             ImGui::Begin("Infos", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
                 ImGui::Text("Tour : %s", myBoard->white_to_play ? "BLANCS" : "NOIRS");
+                if (is_check)
+                {
+                    ImGui::TextColored({1, 0, 0, 1}, "Roi en echec");
+                }
                 if (selected_square) {
                     ImGui::TextColored({0, 1, 0, 1}, "Piece selectionnee");
                     ImGui::Separator();
@@ -181,7 +192,7 @@ int main() {
             if (show_promotion_modal) {
                 ImGui::OpenPopup("Promotion");
                 if (ImGui::BeginPopupModal("Promotion", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
-                    bool is_white = !myBoard->white_to_play; 
+                    bool is_white = myBoard->white_to_play; 
                     auto& p = myBoard->get_board()[promotion_square.first][promotion_square.second];
                     if (ImGui::Button("Reine")) { p = std::make_unique<Queen>(is_white);  show_promotion_modal = false; }
                     if (ImGui::Button("Tour"))  { p = std::make_unique<Rook>(is_white);   show_promotion_modal = false; }

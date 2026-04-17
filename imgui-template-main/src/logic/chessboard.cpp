@@ -8,6 +8,8 @@
 #include "queen.hpp"
 #include "rook.hpp"
 
+#include <vector>
+
 Chessboard::Chessboard()
     : white_to_play(true), check(false), en_passant_possible(false)
 {
@@ -27,19 +29,19 @@ Chessboard::Chessboard()
     board[1][7] = std::make_unique<Knight>(false);
     board[2][0] = std::make_unique<Bishop>(true);
     board[2][7] = std::make_unique<Bishop>(false);
-    board[3][0] = std::make_unique<Queen>(true);
-    board[3][7] = std::make_unique<Queen>(false);
+    board[4][0] = std::make_unique<Queen>(true);
+    board[4][7] = std::make_unique<Queen>(false);
     board[7][0] = std::make_unique<Rook>(true);
     board[7][7] = std::make_unique<Rook>(false);
     board[6][0] = std::make_unique<Knight>(true);
     board[6][7] = std::make_unique<Knight>(false);
     board[5][0] = std::make_unique<Bishop>(true);
     board[5][7] = std::make_unique<Bishop>(false);
-    board[4][0] = std::make_unique<King>(true);
-    board[4][7] = std::make_unique<King>(false);
+    board[3][0] = std::make_unique<King>(true);
+    board[3][7] = std::make_unique<King>(false);
 
-    white_king = std::make_pair(4, 0);
-    black_king = std::make_pair(4, 7);
+    white_king = std::make_pair<int>(3, 0);
+    black_king = std::make_pair<int>(3, 7);
 }
 
 std::vector<std::vector<std::unique_ptr<Piece>>>& Chessboard::get_board()
@@ -132,7 +134,7 @@ std::vector<std::pair<int, int>> Chessboard::piece_movement(std::pair<int, int>&
     std::vector<std::pair<int, int>> piece_move = (*board[piece.first][piece.second]).possible_moves(*this, piece);
     if (check)
     {
-        /* code */
+        //do stuff
     }
     return piece_move;
 }
@@ -149,7 +151,8 @@ std::vector<std::pair<int, int>> Chessboard::select_piece(std::pair<int, int>& s
 }
 
 bool Chessboard::movement(const std::pair<int, int>& start_position, const std::pair<int, int>& end_position)
-{ if (abs(end_position.second - start_position.second) == 2 && dynamic_cast<Pawn*>(board[start_position.first][start_position.second].get()) != nullptr)
+{
+    if (abs(end_position.second - start_position.second) == 2 && dynamic_cast<Pawn*>(board[start_position.first][start_position.second].get()) != nullptr)
     {
         en_passant_possible = true;
         en_passant_case.first = end_position.first;
@@ -165,10 +168,45 @@ bool Chessboard::movement(const std::pair<int, int>& start_position, const std::
     }
     else
     {
+        if (en_passant_possible && end_position.first == en_passant_case.first && end_position.second == en_passant_case.second && dynamic_cast<Pawn*>(board[start_position.first][start_position.second].get()) != nullptr)
+        {
+            board[end_position.first][start_position.second] = nullptr;
+            
+        }
         en_passant_possible = false;
     }
     
+    if (dynamic_cast<King*>(board[start_position.first][start_position.second].get()) != nullptr)
+    {
+        if (white_to_play)
+        {
+            white_king.first = end_position.first;
+            white_king.second = end_position.second;
+        }
+        else
+        {
+            black_king.first = end_position.first;
+            black_king.second = end_position.second;
+        }
+    }
+    
+    if (white_to_play)
+    {
+        is_check(black_king);
+    }
+    else
+    {
+        is_check(white_king);
+    }
+
     board[end_position.first][end_position.second] = std::move(board[start_position.first][start_position.second]);
-    board[start_position.first][start_position.second] = nullptr;
+    board[start_position.first][start_position.second] = nullptr;  
+
+    if (check)
+    {
+        check = false;
+        return false;
+    }
+    
     return true;
 }
